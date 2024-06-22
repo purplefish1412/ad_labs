@@ -103,7 +103,7 @@ class StockExample(server.App):
         weeks = params['weeks']
         year = params['year']
 
-        df_all = read_csv_data(r'C:\Users\masly\OneDrive\Документы\GitHub\ad_labs\NOAA_ALL_CSV.csv')
+        df_all = read_csv_data(r'C:\Users\masly\OneDrive\Документы\GitHub\ad_labs\lab-2\csv_lab2\NOAA_ALL_CSV.csv')
         min_week, max_week = map(int, weeks.split("-"))
         min_year, max_year = map(int, year.split("-"))
         df = df_all[(df_all['area'] == region) &
@@ -127,4 +127,4 @@ class StockExample(server.App):
 
 if __name__ == '__main__':
     app = StockExample()
-    app.launch(port=7474)
+    app.launch(port=7473)
