@@ -68,11 +68,12 @@ class StockExample(server.App):
             "action_id": "update_data"
         },
         {
-            "type":'slider',
+            "type":'text',
             "label": 'Рік:',
-            "min" : 1981,
-            "max" : 2024,
             "key": 'year',
+            "min": 1991,
+            "max": 2024,
+            "value":'1991-2000',
             "action_id" : "update_data"
         },
     ]
@@ -100,12 +101,14 @@ class StockExample(server.App):
         noaa = params['noaa']
         region = int(params['regions'])
         weeks = params['weeks']
-        year = int(params['year'])
+        year = params['year']
 
-        df_all = read_csv_data(r'C:\Users\ethan\OneDrive\Desktop\Subjects\2_semester\data_analysys\lab_2\csv_lab2\NOAA_ALL_CSV.csv')
+        df_all = read_csv_data(r'C:\Users\masly\OneDrive\Desktop\ad\csv_lab2\NOAA_ALL_CSV.csv')
         min_week, max_week = map(int, weeks.split("-"))
+        min_year, max_year = map(int, year.split("-"))
         df = df_all[(df_all['area'] == region) &
-                    (df_all['Year'] == year) &
+                    (df_all['Year'] >= min_year) &
+                    (df_all['Year'] <= max_year) &
                     (df_all['Week'] >= min_week) &
                     (df_all['Week'] <= max_week)][['Year',  'Week', noaa]]
         return df
@@ -115,10 +118,9 @@ class StockExample(server.App):
         data = self.getData(params)
         df = data.drop(columns=['Year'], axis=1)
 
-        plt.figure(figsize=(9, 5))
-        sns.set_style("whitegrid")
-        with sns.color_palette("Set2"):
-            fig = sns.lineplot(data=df, x='Week', y=noaa, zorder=1)
+        plt.figure(figsize=(12, 6))
+        sns.set_style("darkgrid")
+        fig = sns.lineplot(data=df, x='Week', y=noaa, zorder=1)
 
         plt.scatter(df['Week'], df[noaa], marker='.', s=50, zorder=2)
         return fig
